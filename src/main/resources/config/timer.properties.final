@@ -1,0 +1,8 @@
+patient=0 0/5 * * * ?
+orders=0 0/2 * * * ?
+inspections=0 0/2 * * * ?
+labtest=0 0/2 * * * ?
+pub=0 0 4 * * ?
+
+#set patient status to out before sync patients
+updateNew=false

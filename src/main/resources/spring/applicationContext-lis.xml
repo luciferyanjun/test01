@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/context
+     			http://www.springframework.org/schema/context/spring-context-3.2.xsd
+     			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+     			http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+    			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+     			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+	
+	<!-- lis数据库 -->
+	<bean id="lisDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${lis.jdbc.driverClassName}" />
+		<property name="url" value="${lis.jdbc.url}" />
+		<property name="username" value="${lis.jdbc.username}" />
+		<property name="password" value="${lis.jdbc.password}" />
+	</bean>
+
+	<!-- Transaction management-->
+	<bean id="txManagerLis" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="lisDataSource" />
+	</bean>
+	<tx:advice id="txAdviceLis" transaction-manager="txManagerHis">
+		<tx:attributes>
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut id="lisService"
+			expression="execution(* com.lachesis.mnis.datasync.inter.lis.service.*.*(..)))" />
+		<aop:advisor advice-ref="txAdviceLis" pointcut-ref="lisService" />
+	</aop:config>
+	
+	<!-- define the SqlSessionFactory -->
+	<bean id="sqlSessionFactoryLis" class="org.mybatis.spring.SqlSessionFactoryBean" scope="prototype">
+		<property name="dataSource" ref="lisDataSource" />
+		<property name="configLocation" value="classpath:spring/MyBatis-Mnis-Configuration.xml" />
+	</bean>
+	
+	<bean id="lisSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+		<constructor-arg ref="sqlSessionFactoryLis"/>
+	</bean>
+	
+	<!-- DAO Mapper 层 -->
+	<bean id="baseMapperLis" class="org.mybatis.spring.mapper.MapperFactoryBean" abstract="true" lazy-init="true">
+		<property name="sqlSessionFactory" ref="sqlSessionFactoryLis" />
+		<property name="sqlSessionTemplate" ref="lisSqlSessionTemplate"/>
+	</bean>
+	<!-- 同步mapper-->
+	<bean id="lisDataMapper" parent="baseMapperLis">
+		<property name="mapperInterface" value="com.lachesis.mnis.datasync.inter.lis.mapper.LISDataMapper" />
+	</bean>
+	
+	
+</beans>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Body>
+		<manageEMRWS xmlns="http://tempuri.org/">
+			<reqType>uploadGlucose</reqType>
+			<reqXml><![CDATA[<?xml version="1.0" standalone="yes"?>
+<DocumentElement>
+  <ResultCode>0</ResultCode>
+  <ResultContent>Sucess</ResultContent>
+  <glucoseList>
+    <glucose>
+      <PatientNo>999999999</PatientNo>
+      <GlucoseId>12312312</GlucoseId>
+      <HisId></HisId>
+      <TestTime>2016-02-25 19:00:00</TestTime>
+      <TestValue>8.5</TestValue>
+      <ResultType>1</ResultType>
+      <SaveOrUpdate>Save</SaveOrUpdate>
+      <OperaterId>0115</OperaterId>
+      <OperaterName>张三</OperaterName>
+      <TestIsNormal>Normal</TestIsNormal>
+      <RefValue>5.0-7.8</RefValue>
+    </glucose>
+  </glucoseList>
+</DocumentElement>
+]]></reqXml>
+		</manageEMRWS>
+	</soap:Body>
+</soap:Envelope>

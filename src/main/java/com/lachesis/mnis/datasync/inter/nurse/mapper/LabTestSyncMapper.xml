@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.lachesis.mnis.datasync.inter.nurse.mapper.LabTestSyncMapper">
+
+	<resultMap type="com.lachesis.mnis.datasync.entity.lis.PatLabTestMas"
+		id="PatLabTestMas">
+		<id property="test_no" column="test_no" />
+		<result property="id" column="id" />
+		<result property="pat_id" column="pat_id" />
+		<result property="in_hosp_no" column="in_hosp_no" />
+		<result property="test_subject" column="test_subject" />
+
+	</resultMap>
+
+	<!-- 患者检验主表 -->
+	<insert id="insertPatLabTestMas" parameterType="java.util.List">
+		insert into
+		dbo.PAT_LAB_TEST_MAS
+		(TEST_NO, PAT_ID, IN_HOSP_NO, TEST_SUBJECT,
+		TEST_SPECIMEN, SEND_PEOPLE, SEND_DATE, TEST_PEOPLE, TEST_DATE,
+		REPORT_PEOPLE, REPORT_DATE, CHECK_PEOPLE, CHECK_DATE, STATUS,
+		SYNC_CREATE, SYNC_UPDATE)
+		values(
+		#{test_no},
+		#{pat_id},
+		#{in_hosp_no},
+		#{test_subject},
+		#{test_specimen},
+		#{send_people},
+		#{send_date},
+		#{test_people},
+		#{test_date},
+		#{report_people},
+		#{report_date},
+		#{check_people},
+		#{check_date},
+		#{status},
+		#{sync_create},
+		getdate()
+		)
+	</insert>
+
+	<!-- 患者检验报告详细 -->
+	<insert id="insetLabTestDetail" parameterType="java.util.List">
+		insert into dbo.PAT_LAB_TEST_DETAIL
+		( TEST_NO, ITEM_NO, ITEM_CODE,
+		ITEM_NAME, RESULT_VALUE,
+		RESULT_UNIT, REF_RANGES, NORMAL_FLAG,
+		SYNC_CREATE, SYNC_UPDATE)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.test_no},
+			#{item.item_no},
+			#{item.item_code},
+			#{item.item_name},
+			#{item.result_value},
+			#{item.result_unit},
+			#{item.ref_ranges},
+			#{item.normal_flag},
+			#{item.sync_create},
+			getdate())
+		</foreach>
+	</insert>
+
+	<select id="findLabTestByNo" resultMap="PatLabTestMas">
+		select * from
+		PAT_LAB_TEST_MAS where TEST_NO = #{test_no} and PAT_ID=#{pat_id}
+	</select>
+</mapper>

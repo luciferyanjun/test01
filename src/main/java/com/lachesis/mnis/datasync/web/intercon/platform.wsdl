@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!--File platform.wsdl, application platform--><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="platform" targetNamespace="urn:hl7-org:v3" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:hl7-org:v3" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="platformHttpBinding" originalBindingStyle="document"/>
+        <generatedXSD location="platform_InlineSchema1.xsd"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  
+  
+  
+  
+  
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:hl7-org:v3">
+      <xsd:include schemaLocation="http://192.168.100.160:7800/platform/platform?xsd=xsd0"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="HIPMessageServerRequestMsg">
+    <wsdl:part element="tns:HIPMessageServer" name="HIPMessageServerParameters"/>
+  </wsdl:message>
+  <wsdl:message name="HIPMessageServerResponseMsg">
+    <wsdl:part element="tns:HIPMessageServerResponse" name="HIPMessageServerResult"/>
+  </wsdl:message>
+  <wsdl:portType name="platform">
+    <wsdl:operation name="HIPMessageServer">
+            <wsdl:input message="tns:HIPMessageServerRequestMsg" name="HIPMessageServerRequest"/>
+            <wsdl:output message="tns:HIPMessageServerResponseMsg" name="HIPMessageServerResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+    <wsdl:binding name="platformHttpBinding" type="tns:platform">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="HIPMessageServer">
+            <soap12:operation soapAction="urn:hl7-org:v3/HIPMessageServer"/>
+            <wsdl:input name="HIPMessageServerRequest">
+                <soap12:body use="literal"/>
+            </wsdl:input>
+      <wsdl:output name="HIPMessageServerResponse">
+                <soap12:body use="literal"/>
+            </wsdl:output>
+    </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="HIPService">
+    <wsdl:port binding="tns:platformHttpBinding" name="platformHttpPort">
+      <soap12:address location="http://192.168.100.160:7800/platform/platform"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

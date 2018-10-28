@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lachesis.mnis.datasync.inter.his.mapper.HISDataMapper">
+	<resultMap id="PatCureInfo" type="com.lachesis.mnis.datasync.entity.patient.PatCureInfo">
+		<id property="id" column="id" />
+		<result property="pat_id" column="pat_id" />
+		<result property="hosp_no" column="hosp_no" />
+		<result property="bed_code" column="bed_code" />
+		<result property="ward_code" column="ward_code" />
+		<result property="barcode" column="barcode" />
+		<result property="name" column="name" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="gender" column="gender" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>		
+		<result property="person_id" column="person_id"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="birth_date" column="birth_date" />
+		<result property="contact_person" column="contact_person"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="contact_phone" column="contact_phone" />		
+		<result property="contact_address" column="contact_address"   typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="is_baby" column="is_baby" />
+		<result property="danger_level" column="danger_level" />
+		<result property="nurse_level" column="nurse_level" />		
+		<result property="charge_type" column="charge_type" />
+		<result property="charge_type_name" column="charge_type_name"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="doctor_code" column="doctor_code" />
+		<result property="doctor_name" column="doctor_name"   typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>	
+		<result property="duty_nurse_code" column="duty_nurse_code" />	
+		<result property="duty_nurse_name" column="duty_nurse_name"   typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>	
+		<result property="in_date" column="in_date" />
+		<result property="in_diag" column="in_diag"   typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="out_date" column="out_date" />
+		<result property="out_diag" column="out_diag"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>		
+		<result property="status" column="status" />
+		<result property="diet_name" column="diet_name" />
+		<result property="remark" column="remark"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="sync_create" column="sync_create" />
+		<result property="sync_update" column="sync_update" />
+		<result property="allergen" column="allergen"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="adverse_reaction_drugs" column="adverse_reaction_drugs"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="marital_status" column="marital_status"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="occupation" column="occupation"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="education" column="education"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="hometown" column="hometown"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="religion" column="religion"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="source" column="source"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="dailycaregivers" column="dailycaregivers"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="admissionmode" column="admissionmode"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+	</resultMap>
+	
+	<resultMap id="ComWard" type="com.lachesis.mnis.datasync.entity.pub.ComWard">
+		<id property="code" column="code" />
+		<result property="dept_code" column="dept_code" />
+		<result property="name" column="name"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="search_code" column="search_code" />
+		<result property="tags" column="tags" />
+		<result property="flag" column="flag" />
+		<result property="sync_create" column="sync_create" />
+		<result property="sync_update" column="sync_update" />
+		<result property="is_dept" column="is_dept" />
+	</resultMap>
+	
+	<resultMap type="com.lachesis.mnis.datasync.entity.pub.ComUser" id="ComUser">
+		<id property="id" column="id"/>
+		<result property="code" column="code"/>
+		<result property="loginName" column="login_name"/>
+		<result property="name" column="name"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="password" column="password"/>
+		<result property="gender" column="gender" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="phone" column="phone"/>
+		<result property="email" column="email"/>
+		<result property="remark" column="remark"  typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="flag" column="flag"/>
+		<result property="userType" column="empl_type"/>
+		<result property="sync_create" column="sync_create"/>
+		<result property="sync_update" column="sync_update"/>
+	</resultMap>
+	
+	<resultMap type="com.lachesis.mnis.datasync.entity.pub.ComBed" id="ComBed">
+		<id property="id" column="id"/>
+		<result property="code" column="code"/>
+		<result property="ward_code" column="ward_code"/>
+		<result property="bed_type" column="bed_type"/>
+		<result property="bed_type_name" column="bed_type_name" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="bed_price" column="bed_price"/>
+		<result property="tags" column="tags"/>
+		<result property="flag" column="flag"/>
+		<result property="sync_create" column="sync_create"/>
+		<result property="sync_update" column="sync_update"/>
+	</resultMap>
+	
+	<resultMap type="com.lachesis.mnis.datasync.entity.pub.ComWardUser" id="ComWardUser">
+		<result property="ward_code" column="ward_code"/>
+		<result property="user_code" column="user_code"/>
+	</resultMap>
+	
+	<resultMap type="com.lachesis.mnis.datasync.entity.lis.PatLabTestMas" id="PatLabTestMas">
+		<id property="test_no" column="test_no"/>
+		<result property="id" column="id"/>
+		<result property="pat_id" column="pat_id"/>
+		<result property="in_hosp_no" column="in_hosp_no"/>
+		<result property="test_subject" column="test_subject" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="test_specimen" column="test_specimen" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="send_people" column="send_people" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="send_date" column="send_date"/>
+		<result property="test_people" column="test_people" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="test_date" column="test_date"/>
+		<result property="report_people" column="report_people" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="check_people" column="check_people" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="check_date" column="check_date"/>
+		<result property="status" column="status"/>
+		<result property="sync_create" column="sync_create"/>
+		<result property="sync_update" column="sync_update"/>
+	</resultMap>
+	
+	<resultMap type="com.lachesis.mnis.datasync.entity.lis.PatLabTestDetail" id="PatLabTestDetail">
+		<id property="id" column="id"/>
+		<result property="test_no" column="test_no"/>
+		<result property="item_code" column="item_code"/>
+		<result property="item_name" column="item_name" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="result_value" column="result_value" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="result_unit" column="result_unit" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="ref_ranges" column="ref_ranges" typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler"/>
+		<result property="normal_flag" column="normal_flag"/>
+		<result property="sync_create" column="sync_create"/>
+		<result property="sync_update" column="sync_update"/>
+	</resultMap>
+	
+	<!-- 患者查询列 -->
+	<sql id="sqlPatientColumn">
+	<!-- pv.anam_id pat_id,pv.anam_id hosp_no, bed.bed_id bed_code, '101007' ward_code,
+	  pv.anam_id barcode, pv.PATI_NAME name, decode(pv.sex,'男','M','女','F') gender,pv.CERTIFICATE_CODE person_id,pv.out_date,
+	  pv.BIRTHDAY birth_date, '' contact_person,'' contact_phone,'' contact_address, '' is_baby, '' danger_level, 
+	  decode(bed.nurselevel,'特级护理',0,'一级护理',1,'二级护理',2,'三级护理',3,4) nurse_level,'' charge_type,'' charge_type_name,
+	  '' doctor_code, '' doctor_name,pv.INSURE duty_nurse_code, '' duty_nurse_name, pv.in_date , '' in_diag, '' out_diag,'' status,
+	  '' diet_name, '' remark,'' allergen, '' adverse_reaction_drugs, '' marital_status,'' occupation
+	from DLYYDC.HIS_INPATI_INFO pv inner join dlyydc.his_bed bed on pv.anam_id = bed.ANAM_ID -->
+	
+	in_hosp_no hosp_no, * from pat_cure_info
+		
+	</sql>
+
+	<select id="getDatabaseServerTime" resultType="java.util.Date">
+		select getdate()
+	</select>
+
+     <!-- 获取上一次时间更新后办理入院、出院的病人  （不包括数据变动人员） -->
+	<select id="getHisChangePatCureInfo"  parameterType="String"  resultMap="PatCureInfo" >
+		select 
+		<include refid="sqlPatientColumn" /> 
+		<!-- where pv.syn_datetime>=to_date(#{param2},'yyyy-MM-dd hh24:mi:ss')
+		and (pv.IN_OFFICE_CODE = '101007' or pv.IN_OFFICE_CODE = '105001')  and pv.anam_id != '99999999' -->
+	</select>
+	
+	<!-- 根据病区（科室）获取该病区下所有病人信息 -->
+	<select id="getHisInAllPatCureInfo"  parameterType="String" resultMap="PatCureInfo">
+		select 
+		<include refid="sqlPatientColumn" />  
+	    <!-- where pv.IN_OFFICE_CODE=#{param1}  and pv.anam_id != '99999999' -->
+	</select>
+	
+	<!-- 获取所有病区（科室）信息 -->
+	<select id="getComWards" parameterType="String" resultMap="ComWard">
+		select '101007' code,'101007' dept_code,'内分泌科' name,
+		'' search_code ,1 is_dept,sysdate SYNC_CREATE
+ 		from dual
+		<!-- CORE_HIS50.View_xt_dept t where t.dept_code in('1028','1135','1059','N028','N039','N120') <where>
+			<if #{param1}!=null> t.oper_date>=to_date(#{param1},'yyyy-MM-dd hh24:mi:ss') </if>
+		</where> -->
+	</select>
+	
+	<!-- 获取用户信息 -->
+	<select id="getComUsers" parameterType="String" resultMap="ComUser">
+		select t.empl_code id,t.empl_code code,t.empl_name name,'246' password,sysdate SYNC_CREATE,sex_code gender,account login_name,empl_type,
+		1 flag from CORE_HIS50.VIEW_XT_USER t 
+		where t.dept_code in ('1028','1135','1059','N028','N039','N120')
+	</select>
+	 
+	<select id="getComWardUsers"  resultMap="ComWardUser">
+	 	select t.empl_code user_code,'N028' ward_code from CORE_HIS50.VIEW_XT_USER t 
+    	where t.dept_code in ('1028','1135','1059','N028','N039','N120')
+	</select>
+	
+	 <!-- 获取病床信息 -->
+	<select id="getComBeds"  parameterType="String" resultMap="ComBed">
+	 	select t.bed_no code,'N208' ward_code,t.bed_approved_type,t.bed_sex_type,t.bed_class,t.bed_status from BED_REC t
+	</select>
+	
+	
+	<!-- 获取检验主记录数据 -->
+	<select id="getLabTestMas" parameterType="Map" resultMap="PatLabTestMas">
+		select t.test_no,t.patient_id||'_'||t.visit_id pat_id,t.patient_id in_hosp_no,t.subject test_subject,
+		t.specimen TEST_SPECIMEN,t.ordering_provider SEND_PEOPLE,t.requested_date_time SEND_DATE,
+		'' TEST_PEOPLE,'' TEST_DATE,t.transcriptionist REPORT_PEOPLE,t.results_rpt_date_time REPORT_DATE,
+		'' CHECK_PEOPLE,'' CHECK_DATE,t.result_status STATUS 
+		from pats_in_hospital ph 
+     	left join lab_test_master t on ph.patient_id=t.patient_id and ph.visit_id=t.visit_id
+		where ph.ward_code in ('H250005','H250004','H250003')  and t.patient_id is not null
+		and ((t.requested_date_time>to_date(#{upTime},'yyyy-MM-dd hh24:mi:ss')
+		and t.requested_date_time &lt;=to_date(#{endTime},'yyyy-MM-dd hh24:mi:ss'))
+		or (t.results_rpt_date_time>to_date(#{upTime},'yyyy-MM-dd hh24:mi:ss')
+		and t.results_rpt_date_time&lt;=to_date(#{endTime},'yyyy-MM-dd hh24:mi:ss')))
+	</select>
+	
+	<!-- 获取检验明细数据 -->
+	<select id="getLabTestDetails" parameterType="Map" resultMap="PatLabTestDetail">
+		select li.test_no,li.item_no,li.item_code,li.item_name,
+	    t.result RESULT_VALUE,t.units,t.LOWER_LIMIT||'-'||UPPER_LIMIT REF_RANGES,
+	    t.abnormal_indicator NORMAL_FLAG 
+	    from pats_in_hospital ph
+      	left join lab_test_master lm on ph.patient_id=lm.patient_id and ph.visit_id=lm.visit_id
+	    left join lab_test_items li  on lm.test_no=li.test_no
+	    left join lab_result t on li.test_no=t.test_no and li.item_no=t.item_no
+	    where   ph.ward_code in ('H250005','H250004','H250003') and lm.patient_id is not null
+	    and ((lm.requested_date_time>to_date(#{upTime},'yyyy-MM-dd hh24:mi:ss') 
+	    and lm.requested_date_time&lt;=to_date(#{endTime},'yyyy-MM-dd hh24:mi:ss'))
+	    or (lm.results_rpt_date_time>to_date(#{upTime},'yyyy-MM-dd hh24:mi:ss')
+	    and lm.results_rpt_date_time&lt;=to_date(#{endTime},'yyyy-MM-dd hh24:mi:ss')))
+	    and li.test_no is not null		
+	</select>
+</mapper>

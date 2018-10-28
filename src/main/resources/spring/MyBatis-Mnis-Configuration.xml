@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+		<setting name="lazyLoadingEnabled" value="false" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="useColumnLabel" value="true" />
+		<setting name="useGeneratedKeys" value="false" />
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<setting name="defaultExecutorType" value="SIMPLE" /> <!-- BATCH, REUSE -->
+		<setting name="defaultStatementTimeout" value="25000" />
+		<setting name="safeRowBoundsEnabled" value="false" />
+		<setting name="mapUnderscoreToCamelCase" value="false" />
+		<setting name="localCacheScope" value="SESSION" />
+		<setting name="jdbcTypeForNull" value="OTHER" />
+		<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
+	</settings>
+	<typeAliases>
+		<typeAlias alias="PatCureInfo" type="com.lachesis.mnis.datasync.entity.patient.PatCureInfo"/>
+		<typeAlias alias="DataSync" type="com.lachesis.mnis.datasync.entity.SysDataSync"/>
+		<typeAlias alias="ComWard" type="com.lachesis.mnis.datasync.entity.pub.ComWard"/>
+		<typeAlias alias="ComUser" type="com.lachesis.mnis.datasync.entity.pub.ComUser"/>
+		<typeAlias alias="ComBed" type="com.lachesis.mnis.datasync.entity.pub.ComBed"/>
+		<typeAlias alias="PatLabTestMas"  type="com.lachesis.mnis.datasync.entity.lis.PatLabTestMas"/>
+		<typeAlias alias="PatLabTestDetail"  type="com.lachesis.mnis.datasync.entity.lis.PatLabTestDetail"/>
+	</typeAliases>
+	<typeHandlers>
+		<typeHandler handler="com.lachesis.mnis.datasync.handler.DoubleToBoolHandler"/>
+		<typeHandler handler="com.lachesis.mnis.datasync.handler.DateToStringHandler"/>
+		<typeHandler javaType="String" jdbcType="VARCHAR" handler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />  
+	</typeHandlers>
+	<mappers>
+	
+	</mappers>
+</configuration>	
+

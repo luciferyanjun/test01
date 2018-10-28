@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lachesis.mnis.datasync.inter.nurse.mapper.DataSyncMapper">
+
+	<resultMap id="PatCureInfo"
+		type="com.lachesis.mnis.datasync.entity.patient.PatCureInfo">
+		<id property="id" column="id" />
+		<result property="pat_id" column="pat_id" />
+		<result property="hosp_no" column="hosp_no" />
+		<result property="bed_code" column="bed_code" />
+		<result property="show_bed_code" column="show_bed_code" />
+		<result property="ward_code" column="ward_code" />
+		<result property="barcode" column="barcode" />
+		<result property="name" column="name"
+			typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />
+		<result property="gender" column="gender"
+			typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />
+		<result property="person_id" column="person_id"
+			typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />
+		<result property="birth_date" column="birth_date" />
+		<result property="is_baby" column="is_baby" />
+		<result property="danger_level" column="danger_level" />
+		<result property="nurse_level" column="nurse_level" />
+		<result property="doctor_code" column="doctor_code" />
+		<result property="doctor_name" column="doctor_name"
+			typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />
+		<result property="duty_nurse_code" column="duty_nurse_code" />
+		<result property="duty_nurse_name" column="duty_nurse_name"
+			typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />
+		<result property="in_date" column="in_date" />
+		<result property="in_diag" column="in_diag"
+			typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />
+		<result property="out_date" column="out_date" />
+		<result property="out_diag" column="out_diag"
+			typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />
+		<result property="status" column="status" />
+		<result property="diet_name" column="diet_name" />
+		<result property="remark" column="remark"
+			typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />
+		<result property="sync_create" column="sync_create" />
+		<result property="sync_update" column="sync_update" />
+		<result property="allergen" column="allergen"
+			typeHandler="com.lachesis.mnis.datasync.handler.StringTypeHandler" />
+	</resultMap>
+	
+	<!-- 删除患者信息 -->
+	<delete id="delChangePatCurInfos"
+		parameterType="com.lachesis.mnis.datasync.entity.patient.PatCureInfo">
+		delete from pat_cure_info where
+		<if test="pat_id != null"> pat_id=#{pat_id} </if>
+		<if test="ward_code!= null and bed_code!=null"> or(ward_code=#{ward_code} and bed_code=#{bed_code}) </if>
+	</delete>
+
+	<!-- 插入患者增量更新数据 -->
+	<insert id="insertPatCurInfo"
+		parameterType="com.lachesis.mnis.datasync.entity.patient.PatCureInfo">
+		INSERT INTO PAT_CURE_INFO(
+		PAT_ID, IN_HOSP_NO, BED_CODE,SHOW_BED_CODE, WARD_CODE,
+		BARCODE, NAME, GENDER, PERSON_ID,
+		BIRTH_DATE, CONTACT_PERSON, CONTACT_PHONE,CONTACT_ADDRESS,
+		IS_BABY, DANGER_LEVEL, NURSE_LEVEL, CHARGE_TYPE, CHARGE_TYPE_NAME,
+		DOCTOR_CODE, DOCTOR_NAME,DUTY_NURSE_CODE,DUTY_NURSE_NAME,IN_DATE,
+		IN_DIAG, OUT_DATE, OUT_DIAG,
+		STATUS ,DIET_NAME, REMARK, SYNC_CREATE,
+		SYNC_UPDATE,ALLERGEN,ADVERSE_REACTION_DRUGS
+		,CREATE_PERSON,CREATE_TIME)
+		values
+		(#{pat_id},
+		#{hosp_no},
+		#{bed_code},
+		#{show_bed_code},
+		#{ward_code},
+		#{barcode},
+		#{name},
+		#{gender},
+		#{person_id},
+		#{birth_date},
+		#{contact_person},
+		#{contact_phone},
+		#{contact_address},
+		#{is_baby},
+		#{danger_level},
+		#{nurse_level},
+		#{charge_type},
+		#{charge_type_name},
+		#{doctor_code},
+		#{doctor_name},
+		#{duty_nurse_code},
+		#{duty_nurse_name},
+		#{in_date},
+		#{in_diag},
+		#{out_date},
+		#{out_diag},
+		#{status} ,
+		#{diet_name},
+		#{remark},
+		#{sync_create},
+		getdate(),
+		#{allergen},
+		#{adverse_reaction_drugs},getdate(),getdate()
+		)
+	</insert>
+
+	<!-- 插入患者增量更新数据 -->
+	<insert id="insertPatCurInfoList" parameterType="java.util.List">
+		INSERT INTO PAT_CURE_INFO(
+		PAT_ID, IN_HOSP_NO, BED_CODE,SHOW_BED_CODE, WARD_CODE,
+		BARCODE, NAME, GENDER, PERSON_ID,
+		BIRTH_DATE, CONTACT_PERSON, CONTACT_PHONE,CONTACT_ADDRESS,
+		IS_BABY, DANGER_LEVEL, NURSE_LEVEL, CHARGE_TYPE, CHARGE_TYPE_NAME,
+		DOCTOR_CODE, DOCTOR_NAME,DUTY_NURSE_CODE,DUTY_NURSE_NAME,IN_DATE,
+		IN_DIAG, OUT_DATE, OUT_DIAG,
+		STATUS ,DIET_NAME, REMARK, SYNC_CREATE,
+		SYNC_UPDATE,ALLERGEN,ADVERSE_REACTION_DRUGS )
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.pat_id},
+			#{item.hosp_no},
+			#{item.bed_code},
+			#{item.show_bed_code},
+			#{item.ward_code},
+			#{item.barcode},
+			#{item.name},
+			#{item.gender},
+			#{item.person_id},
+			#{item.birth_date},
+			#{item.contact_person},
+			#{item.contact_phone},
+			#{item.contact_address},
+			#{item.is_baby},
+			#{item.danger_level},
+			#{item.nurse_level},
+			#{item.charge_type},
+			#{item.charge_type_name},
+			#{item.doctor_code},
+			#{item.doctor_name},
+			#{item.duty_nurse_code},
+			#{item.duty_nurse_name},
+			#{item.in_date},
+			#{item.in_diag},
+			#{item.out_date},
+			#{item.out_diag},
+			#{item.status} ,
+			#{item.diet_name},
+			#{item.remark},
+			#{item.sync_create},
+			getdate(),
+			#{item.allergen},
+			#{item.adverse_reaction_drugs}
+			)
+		</foreach>
+	</insert>
+
+	<!-- 插入患者增量更新数据 -->
+	<insert id="updatePatCurInfo"
+		parameterType="com.lachesis.mnis.datasync.entity.patient.PatCureInfo">
+		update PAT_CURE_INFO set IN_HOSP_NO=#{hosp_no},
+		BED_CODE=#{bed_code},SHOW_BED_CODE=#{show_bed_code},
+		WARD_CODE=#{ward_code},
+		BARCODE=#{barcode}, NAME=#{name}, GENDER=#{gender}, PERSON_ID=#{person_id},
+		BIRTH_DATE=#{birth_date}, CONTACT_PERSON=#{contact_person},
+		CONTACT_PHONE=#{contact_phone},CONTACT_ADDRESS=#{contact_address},
+		IS_BABY=#{is_baby}, DANGER_LEVEL=#{danger_level},
+		NURSE_LEVEL=#{nurse_level}, CHARGE_TYPE=#{charge_type},
+		CHARGE_TYPE_NAME=#{charge_type_name},
+		DOCTOR_CODE=#{doctor_code},
+		DOCTOR_NAME=#{doctor_name},DUTY_NURSE_CODE=#{duty_nurse_code},DUTY_NURSE_NAME=#{duty_nurse_name},
+		IN_DATE=#{in_date}, IN_DIAG=#{in_diag}, OUT_DATE=#{out_date},
+		OUT_DIAG=#{out_diag},
+		STATUS=#{status} ,DIET_NAME=#{diet_name}, REMARK=#{remark},
+		SYNC_CREATE=#{sync_create},
+		SYNC_UPDATE=getdate(),ALLERGEN=#{allergen},
+		ADVERSE_REACTION_DRUGS=#{adverse_reaction_drugs}
+		where pat_id = #{pat_id}
+	</insert>
+
+	<update id="updateAllToOut">
+		update PAT_CURE_INFO set out_date = getdate(),status='N' where
+		WARD_CODE=#{param1} and status = 'Y' and PAT_ID not in
+		(
+		<foreach collection="param2" item="item" index="index"
+			separator=",">
+			#{item.pat_id}
+		</foreach>
+		)
+	</update>
+
+	<select id="getPatByPatId"
+		parameterType="com.lachesis.mnis.datasync.entity.patient.PatCureInfo"
+		resultMap="PatCureInfo">
+		select PAT_ID, IN_HOSP_NO, BED_CODE,SHOW_BED_CODE,
+		WARD_CODE,
+		BARCODE, NAME, GENDER, PERSON_ID,
+		BIRTH_DATE, CONTACT_PERSON, CONTACT_PHONE,CONTACT_ADDRESS,
+		IS_BABY, DANGER_LEVEL, NURSE_LEVEL, CHARGE_TYPE, CHARGE_TYPE_NAME,
+		DOCTOR_CODE, DOCTOR_NAME,DUTY_NURSE_CODE,DUTY_NURSE_NAME,IN_DATE,
+		IN_DIAG, OUT_DATE, OUT_DIAG,
+		STATUS ,DIET_NAME, REMARK, SYNC_CREATE,
+		SYNC_UPDATE,ALLERGEN,ADVERSE_REACTION_DRUGS
+		from pat_cure_info where pat_id = #{param1}
+
+	</select>
+	
+	<select id="getInHospPat" resultMap="PatCureInfo">
+		select PAT_ID, IN_HOSP_NO, BED_CODE,SHOW_BED_CODE,
+		WARD_CODE,
+		BARCODE, NAME, GENDER, PERSON_ID,
+		BIRTH_DATE, CONTACT_PERSON, CONTACT_PHONE,CONTACT_ADDRESS,
+		IS_BABY, DANGER_LEVEL, NURSE_LEVEL, CHARGE_TYPE, CHARGE_TYPE_NAME,
+		DOCTOR_CODE, DOCTOR_NAME,DUTY_NURSE_CODE,DUTY_NURSE_NAME,IN_DATE,
+		IN_DIAG, OUT_DATE, OUT_DIAG,
+		STATUS ,DIET_NAME, REMARK, SYNC_CREATE,
+		SYNC_UPDATE,ALLERGEN,ADVERSE_REACTION_DRUGS
+		from pat_cure_info where WARD_CODE = #{param1}
+	</select>
+	
+	<select id="findInsulinOrderByNo" parameterType="string" resultType="string">
+		select DOCTOR_ADVICE_ID from BGMS_PAT_INSULIN where DOCTOR_ADVICE_ID = #{param1}
+	</select>
+
+	<insert id="insertInsulinOrder" parameterType="com.lachesis.mnis.datasync.entity.order.PatOrderGroup" useGeneratedKeys="true" keyProperty="id">
+		insert into BGMS_PAT_INSULIN (PAT_ID,MEDICINE_DATE,CREATE_TIME,CREATE_PERSON,DOCTOR_ADVICE_ID)
+		values (#{patId},#{exec_time},#{exec_time},'123',#{orderNo})
+	</insert>
+	
+	<insert id="insertInsulinOrderItem" parameterType="com.lachesis.mnis.datasync.entity.order.PatOrderItem">
+		insert into BGMS_PAT_INSULIN_DETAIL (MAIN_ID,INSULIN_ID,INSULIN_CONSUMPTION,MEDICINE_TIME,CREATE_TIME,CREATE_PERSON,DOCTOR_ADVICE_ID)
+		values (#{mainId},#{itemCode},#{dosage},#{medTime},getDate(),'123',#{orderNo})
+	</insert>
+	
+	<select id="findOralOrderByNo" parameterType="string" resultType="string">
+		select DOCTOR_ADVICE_ID from BGMS_PAT_ORAL_DRUG where DOCTOR_ADVICE_ID = #{param1}
+	</select>
+
+	<insert id="insertOralOrder" parameterType="com.lachesis.mnis.datasync.entity.order.PatOrderGroup" useGeneratedKeys="true" keyProperty="id">
+		insert into BGMS_PAT_ORAL_DRUG (PAT_ID,drug_DATE,CREATE_TIME,CREATE_PERSON,DOCTOR_ADVICE_ID)
+		values (#{patId},#{exec_time},#{exec_time},'123',#{orderNo})
+	</insert>
+	<insert id="insertOralOrderItem" parameterType="com.lachesis.mnis.datasync.entity.order.PatOrderItem">
+		insert into BGMS_PAT_ORAL_DRUG_DETAIL (MAIN_ID,STANDERD_ID,DRUG_CONSUMPTION,DRUG_TIME,CREATE_TIME,CREATE_PERSON,DOCTOR_ADVICE_ID)
+		values (#{mainId},#{itemCode},#{dosage},#{medTime},getDate(),'123',#{orderNo})
+	</insert>
+</mapper>

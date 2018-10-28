@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lachesis.mnis.datasync.inter.lis.mapper.LISDataMapper">
+
+	<resultMap type="com.lachesis.mnis.datasync.entity.lis.PatLabTestMas"
+		id="PatLabTestMas">
+		<id property="test_no" column="test_no" />
+		<result property="id" column="id" />
+		<result property="pat_id" column="pat_id" />
+		<result property="in_hosp_no" column="in_hosp_no" />
+		<result property="test_subject" column="test_subject" />
+		<result property="test_specimen" column="test_specimen" />
+		<result property="send_people" column="send_people" />
+		<result property="send_date" column="send_date" />
+		<result property="test_people" column="test_people" />
+		<result property="test_date" column="test_date" />
+		<result property="report_people" column="report_people" />
+		<result property="report_date" column="REPORT_DATE" />
+		<result property="check_people" column="check_people" />
+		<result property="check_date" column="check_date" />
+		<result property="status" column="status" />
+		<result property="sync_create" column="test_date" />
+		<result property="sync_update" column="test_date" />
+		<collection property="items" resultMap="PatLabTestDetail"></collection>
+	</resultMap>
+
+	<resultMap type="com.lachesis.mnis.datasync.entity.lis.PatLabTestDetail"
+		id="PatLabTestDetail">
+		<id property="id" column="item_id" />
+		<result property="test_no" column="test_no" />
+		<result property="item_code" column="item_code" />
+		<result property="item_no" column="item_no" />
+		<result property="item_name" column="item_name" />
+		<result property="result_value" column="result_value" />
+		<result property="result_unit" column="result_unit" />
+		<result property="ref_ranges" column="ref_ranges" />
+		<result property="normal_flag" column="normal_flag" />
+		<result property="sync_create" column="sync_create" />
+		<result property="sync_update" column="sync_update" />
+	</resultMap>
+
+	<select id="getDatabaseServerTime" resultType="java.util.Date">
+		select getdate();
+		<!-- select sysdate from dual -->
+	</select>
+
+	<!-- 获取检验主记录数据 -->
+	  <select id="getLabTestMas" resultMap="PatLabTestMas">
+	<![CDATA[  
+	 select j.test_no,
+       p.pat_id pat_id,
+       j.in_hosp_no,
+       j.TEST_SUBJECT, 
+         '-'as TEST_SPECIMEN ,
+        '-'as SEND_PEOPLE ,
+        SEND_DATE,
+         '-' as TEST_PEOPLE,
+       j.TEST_DATE,
+        '-' as REPORT_PEOPLE ,
+       j.REPORT_DATE, 
+       '-' as CHECK_PEOPLE,
+        j.CHECK_DATE,
+       to_char(sysdate,'yyyy-MM-dd hh24:mi:ss')as  sync_create,
+         j.STATUS,
+       j.item_code,
+       j.item_name,
+       j.result_value,
+       j.result_unit,
+       j.ref_ranges,
+       j.normal_flag
+  from (select ph.test_no,
+               t.in_hosp_no,
+               t.TEST_SUBJECT,
+               nvl( TEST_SPECIMEN,'-'),
+               nvl(  SEND_PEOPLE,'-'),
+                 SEND_DATE,
+               nvl( t.TEST_PEOPLE,'-'),
+               t.TEST_DATE,
+               nvl( t.REPORT_PEOPLE,'-'),
+               t.TEST_DATE REPORT_DATE,
+                nvl( t.CHECK_PEOPLE,'-'),
+               CHECK_DATE,
+               STATUS,
+               ph.item_code,
+               ph.item_name,
+               ph.result_value,
+               ph.result_unit,
+               ph.ref_ranges,
+               ph. normal_flag
+          from V_PAT_LAB_TEST_DETAIL ph
+          left join V_PAT_LAB_TEST_MAS t
+            on ph.TEST_NO = t.TEST_NO
+         where t.TEST_SUBJECT is not null
+           and t.in_hosp_no is not null) j
+  left join pats_in_hosiptal_lx p
+    on j.in_hosp_no = p.IN_HOSP_NO
+ where p.pat_id is not null
+   and p.STATUS = 'Y'  
+     	 ]]>
+	</select>  
+
+</mapper> 

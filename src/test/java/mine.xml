@@ -1,0 +1,11 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Body>
+		<manageEMRWS xmlns="http://business.emr.whzxyy.com">
+			<reqXml><![CDATA[<?xml version="1.0" standalone="yes"?><DocumentElement><ResultCode>0</ResultCode><ResultContent>Sucess</ResultContent><glucoseList><glucose><PatientNo>34205058_2</PatientNo><GlucoseId>34205058_2_1474534353935_5</GlucoseId><HisId></HisId><TestTime>2016/09/22 16:20:00</TestTime><TestValue>20.0</TestValue><ResultType>5</ResultType><SaveOrUpdate>Save</SaveOrUpdate><OperaterId>1070</OperaterId><OperaterName>尹小英1</OperaterName><TestIsNormal>High</TestIsNormal><RefValue>4.4-10</RefValue></glucose></glucoseList></DocumentElement>]]></reqXml>
+			<reqType>uploadGlucose</reqType>
+		</manageEMRWS>
+	</soap:Body>
+</soap:Envelope>

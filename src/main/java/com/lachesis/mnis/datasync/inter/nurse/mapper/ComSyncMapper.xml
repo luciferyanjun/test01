@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lachesis.mnis.datasync.inter.nurse.mapper.ComSyncMapper">
+	<resultMap id="SysDataSync" type="com.lachesis.mnis.datasync.entity.SysDataSync">
+		<id property="tableName" column="tableName" />
+		<result property="upTime" column="upTime" />
+		<result property="upCount" column="upCount" />
+		<result property="syncAllC" column="syncAllC" />
+		<result property="status" column="status" />
+	</resultMap>
+
+	<resultMap id="ComWard" type="com.lachesis.mnis.datasync.entity.pub.ComWard">
+		<id property="code" column="code" />
+		<result property="dept_code" column="dept_code" />
+		<result property="name" column="name" />
+		<result property="search_code" column="search_code" />
+		<result property="tags" column="tags" />
+		<result property="flag" column="flag" />
+		<result property="sync_create" column="sync_create" />
+		<result property="sync_update" column="sync_update" />
+		<result property="is_dept" column="is_dept" />
+	</resultMap>
+
+	<resultMap id="ComUser" type="com.lachesis.mnis.datasync.entity.pub.ComUser">
+		<id property="code" column="code" />
+		<result property="name" column="name" />
+		<result property="password" column="password" />
+		<result property="gender" column="gender" />
+		<result property="userType" column ="userType"/>
+		<result property="phone" column="phone" />
+		<result property="remark" column="remark" />
+		<result property="flag" column="flag" />
+		<result property="ward_code" column="ward_code" />
+	</resultMap>
+
+
+	<!-- 获取全院病区信息 -->
+	<select id="getComWards" resultMap="ComWard">
+		select WARD_CODE
+		dept_code,NAME,flag from dbo.COM_WARD where FLAG='Y'
+	</select>
+
+	<select id="getComWardById" resultMap="ComWard">
+		select ward_CODE,NAME,flag
+		from dbo.COM_WARD where ward_code = #{param1}
+	</select>
+
+	<!-- 获取his表更新参数和最后更新时间 -->
+	<select id="getDataSync" parameterType="String" resultMap="SysDataSync">
+		SELECT tableName,upTime,upCount,syncALLC,status FROM SYS_DATASYNC
+		WHERE TABLENAME = #{param1}
+	</select>
+
+	<!-- 修改更新参数日志表 -->
+	<update id="upDataSync" parameterType="com.lachesis.mnis.datasync.entity.SysDataSync">
+		update dbo.SYS_DATASYNC set status=#{status}
+		<if test="upTime != null"> ,upTime=#{upTime} </if>
+		<if test="upCount!= null"> ,upCount=#{upCount} </if>
+		where tableName=#{tableName}
+	</update>
+
+	<!-- 插入his数据同步日志 -->
+	<insert id="insertDataSyncLog" parameterType="com.lachesis.mnis.datasync.entity.SysDataSync">
+		INSERT INTO
+		SYS_DATASYNC_LOG(tableName, startTime, endTime, upRows)
+		VALUES(#{tableName}, #{startTime}, #{endTime}, #{upRows})
+	</insert>
+
+	<!-- 添加科室 -->
+	<insert id="insertComWard" parameterType="com.lachesis.mnis.datasync.entity.pub.ComWard">
+		insert into
+		dbo.COM_WARD
+		(ward_CODE, NAME, SEARCH_CODE,
+		TAGS, SYNC_CREATE,
+		SYNC_UPDATE,IS_DEPT,flag,create_person,create_time)
+		values
+		(
+		#{dept_code},
+		#{name},
+		#{search_code},
+		#{tags},
+		#{sync_create},
+		getdate(),
+		#{is_dept},'Y','','')
+	</insert>
+
+	<!-- 删除所在不在列表中的病区信息 -->
+	<update id="removeWardAllNotIn" parameterType="java.util.List">
+		update dbo.COM_WARD set flag='N' where ward_code not in (
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			#{item.dept_code}
+		</foreach>
+		)
+	</update>
+
+	<!-- 修改科室信息 -->
+	<update id="updateComWard" parameterType="com.lachesis.mnis.datasync.entity.pub.ComWard">
+		update COM_WARD set
+		SYNC_UPDATE = getdate(),flag = #{flag} where ward_code = #{dept_code}
+	</update>
+
+	<insert id="insertComUsers" parameterType="java.util.List">
+		insert into dbo.COM_USER
+		(CODE, NAME, PASSWORD, GENDER,USER_ROLE, login_name,
+		PHONE, EMAIL, REMARK, FLAG, SYNC_CREATE, SYNC_UPDATE)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{code},
+			#{name},
+			#{password},
+			#{gender},
+			#{userType},
+			#{iloginName},
+			#{iphone},
+			#{iemail},
+			#{remark},
+			'Y',
+			#{sync_create},
+			getdate())
+		</foreach>
+	</insert>
+
+	<insert id="insertComUser" parameterType="com.lachesis.mnis.datasync.entity.pub.ComUser">
+		insert into
+		dbo.COM_USER
+		(CODE, NAME, PASSWORD, GENDER, login_name,
+		PHONE, EMAIL,
+		REMARK, FLAG, SYNC_CREATE,
+		SYNC_UPDATE,USER_role,CREATE_TIME,CREATE_PERSON)
+		values
+		(#{code},
+		#{name},
+		#{password},
+		#{gender},
+		#{loginName},
+		#{phone},
+		#{email},
+		#{remark},
+		'Y',
+		#{sync_create},
+		getdate(),ISNULL(#{userType},'N'),getdate(),getdate())
+	</insert>
+
+	<insert id="insertComUserRole" parameterType="java.util.List">
+		insert into dbo.COM_USER_role
+		(user_CODE, role_code)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.code},
+			#{item.userType})
+		</foreach>
+	</insert>
+
+	<update id="removeUserAllNotIn" parameterType="java.util.List">
+		update COM_USER set flag = 'N' where code not in (
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			#{item.code}
+		</foreach>
+		)
+	</update>
+
+	<!-- 删除用户信息 -->
+	<delete id="deleteComUser" parameterType="String">
+		delete from
+		dbo.COM_USER where CODE=#{param1}
+	</delete>
+
+	<update id="updateComUser" parameterType="com.lachesis.mnis.datasync.entity.pub.ComUser">
+		update dbo.COM_USER set
+		SYNC_UPDATE = getdate(),FLAG=#{flag} where
+		CODE=#{code}
+	</update>
+
+	<select id="getComUser" parameterType="String" resultMap="ComUser">
+		select
+		CODE, NAME, PASSWORD, GENDER, PHONE, EMAIL, REMARK, FLAG,ward_code
+		from dbo.COM_USER u left join dbo.COM_WARD_USER ward on
+		u.code=ward.user_code where u.CODE=#{param1}
+	</select>
+
+	<!-- 同步床位信息 -->
+	<insert id="insertComBeds" parameterType="java.util.List">
+		insert into dbo.COM_BED
+		(CODE, WARD_CODE, BED_TYPE, BED_TYPE_NAME,
+		BED_PRICE, TAGS, FLAG, SYNC_CREATE, SYNC_UPDATE)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.code},
+			#{item.ward_code},
+			#{item.bed_type},
+			#{item.bed_type_name},
+			#{item.bed_price},
+			#{item.tags},
+			#{item.flag},
+			#{item.sync_create},
+			getdate()
+			)
+		</foreach>
+	</insert>
+
+	<!-- 删除床位信息 -->
+	<delete id="deleteComBed" parameterType="String">
+		delete from dbo.COM_BED
+		where CODE=#{param1}
+	</delete>
+
+	<!-- 同步用户病区信息 -->
+	<insert id="insertComWardUsers">
+		insert into dbo.COM_WARD_USER(WARD_CODE, USER_CODE)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.ward_code},#{item.user_code})
+		</foreach>
+	</insert>
+
+	<insert id="insertComWardUser">
+		insert into dbo.COM_WARD_USER(WARD_CODE, USER_CODE)
+		values
+		(#{ward_code},#{code})
+	</insert>
+
+	<!-- 删除用户病区信息 -->
+	<delete id="deleteComWardUser" parameterType="com.lachesis.mnis.datasync.entity.pub.ComWardUser">
+		delete from
+		dbo.COM_WARD_USER where user_code=#{user_code} and ward_code = #{ward_code}
+	</delete>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.lachesis.mnis.datasync.inter.his.mapper.HisOrdersDataMapper">
+	<resultMap type="com.lachesis.mnis.datasync.entity.order.PatOrderGroup"
+		id="PatOrderGroup">
+		<id property="orderNo" column="order_no" />
+		<result property="patId" column="pat_id" />
+		<result property="exec_time" column="exec_time" />
+		<collection property="items" resultMap="PatOrderItem"></collection>
+	</resultMap>
+	<resultMap type="com.lachesis.mnis.datasync.entity.order.PatOrderItem"
+		id="PatOrderItem">
+		<id property="itemCode" column="item_code" />
+		<result property="orderNo" column="order_no" />
+		<result property="itemName" column="item_name" />
+		<result property="dosage" column="dosage" />
+	</resultMap>
+
+	<!-- 获取临时医嘱 根据录入时间段查询新增医嘱信息 -->
+	<select id="getPatInsulinOrderGroups" parameterType="Map"
+		resultMap="PatOrderGroup">
+		select b.order_no order_no,b.pat_id
+		pat_id,t.exec_id,t.med_code
+		item_code,t.med_name item_name
+		,t.unit
+		dosage_unit,
+		t.dose dosage,b.exec_time exec_time from TNB_ZXXMB t left join TNB_YZZXJL b on 
+  		t.id = b.order_no and t.exec_id = b.ID
+		where b.order_no is not null and b.exec_time >=
+		#{param2} and t.MED_CODE in
+		('2766_03','2767_01','2767_02','2767_03','4212_01',
+		'4213_01','4213_02','4214_01','4214_02','4214_03',
+		'1563_01','1564_01','1565_01','4726_01','974996_01',
+		'973613_01','973613_02','4092_01')
+
+	</select>
+	<select id="getPatOralOrderGroups" parameterType="Map"
+		resultMap="PatOrderGroup">
+		select b.order_no order_no,b.pat_id
+		pat_id,t.exec_id,t.med_code
+		item_code,t.med_name item_name
+		,t.unit
+		dosage_unit,
+		t.dose dosage,b.exec_time exec_time from TNB_ZXXMB t left join TNB_YZZXJL b on 
+  		t.id = b.order_no and t.exec_id = b.ID
+		where b.order_no is not null and b.exec_time >=
+		#{param2} and t.MED_CODE in
+		('1603_01','4777_01','3464_02','3464_03','1158_02','4210_01',
+		'974479_01','979702_01','947756_01','4767_01','4767_02','970799_01',
+		'979706_01','1414_01','2768_01','947756_01','1601_01','3991_01',
+		'2057_01','2057_02','384389_01','732_01','974528_01','974810_01',
+		'979421_01','2494_01','544_01','544_02','544_03')
+	</select>
+
+</mapper>
